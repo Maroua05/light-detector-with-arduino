@@ -1,0 +1,37 @@
+int led = 4;
+int buz =7;
+int sensor = 2;              // capteur relié à la pin 2
+int state = LOW;             // aucun mouvement par defaut
+int val = 0;                 // variable to store the sensor status (value)
+
+void setup() {
+  pinMode(led, OUTPUT);      // pin 4 en sortie
+  pinMode(sensor, INPUT);    // pin 2 en entrée
+  pinMode(buz, OUTPUT);      // pin 7 en sortie
+  Serial.begin(9600);        // initialise le port serie
+}
+ 
+void loop(){
+    val = digitalRead(sensor);// lit la valeur du capteur IR et l'affecte à val  
+    
+  if (val == HIGH) {           // vérifie si le capteur est  HIGH
+    digitalWrite(led, HIGH);   // LED ON
+    digitalWrite(buz, LOW);   // BUZ ON
+    delay(100);                // attente de  100 milliseconds 
+    
+    if (state == LOW) {
+      Serial.println("Attention mouvement!"); 
+      state = HIGH;       //  remise à l'état HIGH
+    }
+  } 
+  else {
+      digitalWrite(led, LOW); // LED OFF
+      digitalWrite(buz, HIGH);   // BUZ OFF
+      delay(200);             // attente de   200 milliseconds 
+      
+      if (state == HIGH){
+        Serial.println(" Aucun mouvement");
+        state = LOW;       // remise à l'état LOW
+    }
+  }
+}
